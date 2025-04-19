@@ -14,7 +14,7 @@ import { LinkIcon, LogOut } from "lucide-react";
 
 const Header = () => {
   const navigate = useNavigate();
-  const user = true; // true means user is logged in and false means it's not
+  const user = false; // true means user is logged in and false means it's not
   return (
     <nav className="py-4 flex justify-between items-center">
       <Link to="/">
