@@ -1,17 +1,15 @@
-//custom hook
-
 import { useState } from "react";
-const useFetch = (cb, options = {}) => {
-  //cb is callback
+
+const useFetch = (cb) => {
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fn = async (...args) => {
+  const fn = async (options) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await cb(options, ...args);
+      const response = await cb(options);
       setData(response);
       setError(null);
     } catch (error) {

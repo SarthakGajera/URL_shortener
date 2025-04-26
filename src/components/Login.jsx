@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -9,9 +9,8 @@ import {
 } from "@/components/ui/card";
 import { Input } from "../components/ui/input";
 import { Button } from "./ui/button";
-import BeatLoader from "./../../node_modules/react-spinners/esm/BeatLoader";
+import BeatLoader from "react-spinners/BeatLoader"; // better way
 import Error from "./Error";
-import { useState } from "react";
 import * as Yup from "yup";
 import useFetch from "./hooks/Use-fetch";
 import login from "../db/apiAuth";
@@ -23,6 +22,12 @@ const Login = () => {
     password: "",
   });
 
+  const { data, error, loading, fn: fnLogin } = useFetch(login);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data, error]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -30,15 +35,6 @@ const Login = () => {
       [name]: value,
     }));
   };
-
-  const { data, error, loading, fn: fnLogin } = useFetch(login, formData);
-
-  useEffect(() => {
-    console.log(data);
-    // if(error===null && data){
-
-    // }
-  }, [data, error]);
 
   const handleLogin = async () => {
     setErrors([]);
@@ -52,25 +48,24 @@ const Login = () => {
           .required("Password is required"),
       });
       await schema.validate(formData, { abortEarly: false });
-      //api call
 
-      await fnLogin();
+      await fnLogin(formData); // ✅ Pass formData here
     } catch (error) {
       const newErrors = {};
       error?.inner?.forEach((error) => {
         newErrors[error.path] = error.message;
-      }); //.inner → an array of individual field errors
-      //(e.g. one for email, one for password, etc.
+      });
       setErrors(newErrors);
     }
   };
+
   return (
     <div>
       <Card>
         <CardHeader>
           <CardTitle>Login</CardTitle>
           <CardDescription>Login to your account</CardDescription>
-          {error && <Error message={"error.message"} />}
+          {error && <Error message={error.message} />} {/* ✅ Correct */}
         </CardHeader>
         <CardContent className="space-y-2">
           <div className="space-y-1">
@@ -87,7 +82,7 @@ const Login = () => {
             <Input
               name="password"
               type="password"
-              placeholder="Enter password"
+              placeholder="Enter Password"
               onChange={handleInputChange}
             />
             {errors.password && <Error message={errors.password} />}
