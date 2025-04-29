@@ -30,3 +30,10 @@ export default async function login({ email, password }) {
 
   // so this function login returns our data i.e about user
 }
+
+export async function getCurrentUser() {
+  const { data: session, error } = await supabase.auth.getSession(); //includes the current session i.e about user,refresh token,access token etc
+  if (!session.session) return null;
+  if (error) throw new Error(error.message);
+  return session.session?.user;
+}
