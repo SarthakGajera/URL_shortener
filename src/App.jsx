@@ -38,11 +38,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return;
-
-  <UrlProvider>
-    <RouterProvider router={router} />;
-  </UrlProvider>;
+  return (
+    <UrlProvider>
+      <RouterProvider router={router} />;
+    </UrlProvider>
+  );
 }
 
 export default App;

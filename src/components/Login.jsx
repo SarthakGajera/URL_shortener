@@ -15,7 +15,7 @@ import * as Yup from "yup";
 import useFetch from "./hooks/Use-fetch";
 import login from "../db/apiAuth";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { UrlState } from "@/Context";
+import { useUrlState } from "../Context";
 
 const Login = () => {
   const [errors, setErrors] = useState([]);
@@ -30,7 +30,7 @@ const Login = () => {
 
   const { data, error, loading, fn: fnLogin } = useFetch(login);
   //form data is the input and data is the output that we are getting
-  const { fetchUser } = UrlState();
+  const { fetchUser } = useUrlState();
 
   useEffect(() => {
     if (error === null && data) {
